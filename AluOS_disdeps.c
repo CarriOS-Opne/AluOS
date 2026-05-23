@@ -2,7 +2,7 @@
 #include "AluOS.h"
 
 // ============================================
-// 🎛️ UI 테스터용 전역 상태 변수
+// Anyone reading this code right now, gay
 // ============================================
 int win_x = 100, win_y = 50;
 int win_w = 800, win_h = 600;
@@ -22,7 +22,7 @@ float efi_sin(float x);
 float efi_cos(float x);
 
 // ============================================
-// ⚡ 이벤트 콜백 함수
+// The part written by AI
 // ============================================
 void OnBtnPlus(void)  { click_count++; }
 void OnBtnMinus(void) { click_count--; }
@@ -30,7 +30,7 @@ void OnBtnReset(void) { click_count = 0; }
 void OnToggle(void)   { toggle_state = !toggle_state; }
 
 // ============================================
-// 🧊 3D 와이어프레임 렌더링 함수
+// Made by humans
 // ============================================
 void Draw3DCube(int cx, int cy, float size, float rot_x, float rot_y, u32 color) {
     float points[8][3] = { {-1,-1,-1}, {1,-1,-1}, {1,1,-1}, {-1,1,-1}, {-1,-1,1}, {1,-1,1}, {1,1,1}, {-1,1,1} };
@@ -50,7 +50,7 @@ void Draw3DCube(int cx, int cy, float size, float rot_x, float rot_y, u32 color)
 }
 
 // ============================================
-// 🚀 메인 OS 엔트리 포인트
+// Made by humans
 // ============================================
 #ifdef __cplusplus
 extern "C"
