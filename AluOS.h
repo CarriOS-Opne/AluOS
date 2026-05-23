@@ -6,7 +6,7 @@
 #endif
 
 // ============================================================================
-// 1. MSVC Linker Error Prevention
+// Made by humans
 // ============================================================================
 #ifdef __cplusplus
 extern "C" {
@@ -99,7 +99,7 @@ typedef struct {
 } EFI_ST;
 
 // ============================================================================
-// 3. AluOS API (Global English Interface)
+// Made by humans
 // ============================================================================
 #define COLOR_BLUE       0xFF2196F3
 #define COLOR_LIGHT_BLUE 0xFF90CAF9
@@ -157,7 +157,7 @@ void IntToString(int n, char* out);
 unsigned long long efi_strlen(const char* str);
 
 // ============================================================================
-// 🌟 3.5. Ultra-Simple API (파이썬보다 쉬운 매크로 엔진!)
+// Made by humans
 // ============================================================================
 // 1. 화면 크기 및 OS 초기화
 #define OS_INIT(w, h) EFI_STATUS EFIAPI EfiMain(EFI_HANDLE ImageHandle, EFI_ST *SystemTable) { Alu_Init(SystemTable, w, h);
