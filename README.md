@@ -13,7 +13,7 @@ if exist "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Bui
     set "VCVARS=C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
     goto found_compiler
 )
-)
+
 set "vswhere=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 if exist "%vswhere%" (
     for /f "usebackq tokens=*" %%i in (`"%vswhere%" -latest -products * -property installationPath`) do (
@@ -24,61 +24,43 @@ if exist "%vswhere%" (
     )
 )
 
-for %%D in (C D E F) do (
-    for %%V in (18 2026 2022 2019) do (
-        for %%E in (Community Professional Enterprise BuildTools) do (
-            if exist "%%D:\Program Files\Microsoft Visual Studio\%%V\%%E\VC\Auxiliary\Build\vcvars64.bat" (
-                set "VCVARS=%%D:\Program Files\Microsoft Visual Studio\%%V\%%E\VC\Auxiliary\Build\vcvars64.bat"
-                goto found_compiler
-            )
-            if exist "%%D:\Program Files (x86)\Microsoft Visual Studio\%%V\%%E\VC\Auxiliary\Build\vcvars64.bat" (
-                set "VCVARS=%%D:\Program Files (x86)\Microsoft Visual Studio\%%V\%%E\VC\Auxiliary\Build\vcvars64.bat"
-                goto found_compiler
-            )
-        )
-    )
-)
-
-
 :no_compiler
 echo.
-echo [FATAL ERROR] Visual Studio C++ Compiler (vcvars64.bat) not found!
-echo 컴파일러를 자동으로 찾을 수 없습니다.
-echo.
-set /p VCVARS="Visual Studio가 설치된 'vcvars64.bat'의 정확한 전체 경로를 입력해주세요: "
+echo [FATAL ERROR] vcvars64.bat not found!
+set /p VCVARS="Enter full path to vcvars64.bat: "
 if not exist "%VCVARS%" (
-    echo [ERROR] 입력하신 경로에도 파일이 없습니다. C++ 데스크톱 개발 워크로드가 설치되었는지 확인해주세요.
+    echo [ERROR] File not found.
     pause
-    exit /b
+    exit /b 1
 )
 
 :found_compiler
-echo [INFO] Found Compiler: %VCVARS%
+echo [INFO] Compiler found: %VCVARS%
 call "%VCVARS%"
 
 echo.
-echo [1/2] Compiling OS Core (bootx64.c)...
-cl /utf-8 /nologo /c /O2 /GS- /Gs1048576 /Gy- /Wall /wd4053 /wd4116 /wd4201 /wd4214 /wd4255 /wd4820 /wd4668 /wd4100 /wd4047 /wd4028 /wd4018 /wd4133 /wd4090 /wd4024 /wd4115 /wd4087 /I. bootx64.c
+echo [1/2] Compiling bootx64.c...
+cl /utf-8 /nologo /c /std:c11 /O2 /GS- /Gs1048576 /Gy- /Zl /Gz /W4 /wd4100 /wd4201 /wd4214 /wd4057 /I. bootx64.c
 if errorlevel 1 goto compile_error
 
 echo.
-echo [2/2] Linking into BOOTX64.EFI...
-link /nologo /subsystem:efi_application /entry:EfiMain /nodefaultlib /dll /out:BOOTX64.EFI bootx64.obj
+echo [2/2] Linking BOOTX64.EFI...
+link /nologo /subsystem:efi_application /entry:EfiMain /nodefaultlib /dll /ALIGN:4096 /out:BOOTX64.EFI bootx64.obj /FORCE:MULTIPLE
 if errorlevel 1 goto link_error
 
 echo.
 echo ========== BUILD SUCCESS ==========
 pause
-exit /b
+exit /b 0
 
 :compile_error
 echo.
-echo [ERROR] Compilation failed! See errors above.
+echo [ERROR] Compilation failed!
 pause
-exit /b
+exit /b 1
 
 :link_error
 echo.
-echo [ERROR] Linking failed! See errors above.
+echo [ERROR] Linking failed!
 pause
-exit /b
+exit /b 1
